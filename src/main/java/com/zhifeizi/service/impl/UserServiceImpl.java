@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(Long id) {
         return userMapper.deleteById(id) > 0;
     }
+
+    @Override
+    public List<User> getByRole(String role) {
+        return userMapper.selectByRole(role);
+    }
 }

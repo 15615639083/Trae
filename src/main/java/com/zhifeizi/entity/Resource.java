@@ -11,6 +11,7 @@ public class Resource {
     private String description;
     private String author;
     private String fileUrl;
+    private Integer downloadCount;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

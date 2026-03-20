@@ -9,4 +9,5 @@ public interface UserService {
     boolean saveUser(User user);
     boolean updateUser(User user);
     boolean deleteUser(Long id);
+    List<User> getByRole(String role);
 }

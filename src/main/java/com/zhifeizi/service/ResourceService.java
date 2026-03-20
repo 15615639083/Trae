@@ -9,4 +9,7 @@ public interface ResourceService {
     boolean saveResource(Resource resource);
     boolean updateResource(Resource resource);
     boolean deleteResource(Long id);
+    boolean incrementDownloadCount(Long id);
+    List<Resource> getResourcesByCategory(String category);
+    List<Resource> searchResources(String keyword);
 }

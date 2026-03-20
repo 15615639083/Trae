@@ -1,21 +1,26 @@
 <template>
   <div class="home">
-    <h1>知飞子 - 资源分享与在线接单平台</h1>
-    <p>欢迎来到知飞子平台，这里是资源分享和在线接单的专业平台。</p>
+    <h1>知飞子 - 游戏资源与技术服务平台</h1>
+    <p>欢迎来到知飞子平台，这里是游戏资源分享和技术服务的专业平台。</p>
     <div class="features">
       <div class="feature">
         <h2>资源分享</h2>
-        <p>分享各种优质资源，包括文档、教程、工具等。</p>
+        <p>分享各种优质游戏资源，包括游戏安装包、补丁、工具等。</p>
         <router-link to="/resources">查看资源</router-link>
       </div>
       <div class="feature">
+        <h2>技术服务市场</h2>
+        <p>寻找专业的技术工程师为您提供游戏安装、BUG修复等服务。</p>
+        <router-link to="/engineers">浏览工程师</router-link>
+      </div>
+      <div class="feature">
         <h2>在线接单</h2>
-        <p>发布和承接各种任务，自由灵活地开展工作。</p>
+        <p>发布和承接各种技术任务，自由灵活地开展工作。</p>
         <router-link to="/orders">查看订单</router-link>
       </div>
       <div class="feature">
         <h2>后台管理</h2>
-        <p>管理员可以管理平台资源和订单，确保平台正常运行。</p>
+        <p>管理员可以管理平台资源、订单和用户，确保平台正常运行。</p>
         <router-link to="/admin">进入管理</router-link>
       </div>
     </div>

@@ -9,4 +9,5 @@ public interface OrderService {
     boolean saveOrder(Order order);
     boolean updateOrder(Order order);
     boolean deleteOrder(Long id);
+    List<Order> getByStatus(String status);
 }

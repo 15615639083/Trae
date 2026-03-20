@@ -3,6 +3,7 @@ package com.zhifeizi.service.impl;
 import com.zhifeizi.entity.Order;
 import com.zhifeizi.mapper.OrderMapper;
 import com.zhifeizi.service.OrderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean deleteOrder(Long id) {
         return orderMapper.deleteById(id) > 0;
+    }
+
+    @Override
+    public List<Order> getByStatus(String status) {
+        QueryWrapper<Order> wrapper = new QueryWrapper<>();
+        wrapper.eq("status", status);
+        return orderMapper.selectList(wrapper);
     }
 }
