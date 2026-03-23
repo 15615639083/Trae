@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -18,16 +19,25 @@ public class OrderController {
     @GetMapping
     public Map<String, Object> listOrders() {
         List<Order> orders = orderService.listOrders();
-        return Map.of("success", true, "orders", orders);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("orders", orders);
+        return map;
     }
 
     @GetMapping("/{id}")
     public Map<String, Object> getOrderById(@PathVariable Long id) {
         Order order = orderService.getOrderById(id);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
-        return Map.of("success", true, "order", order);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("order", order);
+        return map;
     }
 
     @PostMapping
@@ -36,9 +46,16 @@ public class OrderController {
         order.setStatus("pending");
         boolean result = orderService.saveOrder(order);
         if (result) {
-            return Map.of("success", true, "message", "订单创建成功", "order", order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "订单创建成功");
+            map.put("order", order);
+            return map;
         } else {
-            return Map.of("success", false, "message", "订单创建失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单创建失败");
+            return map;
         }
     }
 
@@ -46,9 +63,16 @@ public class OrderController {
     public Map<String, Object> updateOrder(@RequestBody Order order) {
         boolean result = orderService.updateOrder(order);
         if (result) {
-            return Map.of("success", true, "message", "订单更新成功", "order", order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "订单更新成功");
+            map.put("order", order);
+            return map;
         } else {
-            return Map.of("success", false, "message", "订单更新失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单更新失败");
+            return map;
         }
     }
 
@@ -56,9 +80,15 @@ public class OrderController {
     public Map<String, Object> deleteOrder(@PathVariable Long id) {
         boolean result = orderService.deleteOrder(id);
         if (result) {
-            return Map.of("success", true, "message", "订单删除成功");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "订单删除成功");
+            return map;
         } else {
-            return Map.of("success", false, "message", "订单删除失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单删除失败");
+            return map;
         }
     }
 
@@ -69,19 +99,32 @@ public class OrderController {
 
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
 
         if (!"assigned".equals(order.getStatus())) {
-            return Map.of("success", false, "message", "只有已派单的订单可以接单");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "只有已派单的订单可以接单");
+            return map;
         }
 
         order.setStatus("processing");
         boolean result = orderService.updateOrder(order);
         if (result) {
-            return Map.of("success", true, "message", "接单成功", "order", order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "接单成功");
+            map.put("order", order);
+            return map;
         } else {
-            return Map.of("success", false, "message", "接单失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "接单失败");
+            return map;
         }
     }
 
@@ -92,19 +135,32 @@ public class OrderController {
 
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
 
         if (!"processing".equals(order.getStatus())) {
-            return Map.of("success", false, "message", "只有处理中的订单可以完成");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "只有处理中的订单可以完成");
+            return map;
         }
 
         order.setStatus("completed");
         boolean result = orderService.updateOrder(order);
         if (result) {
-            return Map.of("success", true, "message", "服务完成", "order", order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "服务完成");
+            map.put("order", order);
+            return map;
         } else {
-            return Map.of("success", false, "message", "服务完成失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "服务完成失败");
+            return map;
         }
     }
 
@@ -115,19 +171,32 @@ public class OrderController {
 
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
 
         if (!"completed".equals(order.getStatus())) {
-            return Map.of("success", false, "message", "只有已完成的订单可以验收");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "只有已完成的订单可以验收");
+            return map;
         }
 
         order.setStatus("verified");
         boolean result = orderService.updateOrder(order);
         if (result) {
-            return Map.of("success", true, "message", "验收成功", "order", order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "验收成功");
+            map.put("order", order);
+            return map;
         } else {
-            return Map.of("success", false, "message", "验收失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "验收失败");
+            return map;
         }
     }
 
@@ -138,19 +207,32 @@ public class OrderController {
 
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
 
         if (!"pending".equals(order.getStatus()) && !"assigned".equals(order.getStatus())) {
-            return Map.of("success", false, "message", "只有待派单或已派单的订单可以取消");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "只有待派单或已派单的订单可以取消");
+            return map;
         }
 
         order.setStatus("cancelled");
         boolean result = orderService.updateOrder(order);
         if (result) {
-            return Map.of("success", true, "message", "订单取消成功", "order", order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "订单取消成功");
+            map.put("order", order);
+            return map;
         } else {
-            return Map.of("success", false, "message", "订单取消失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单取消失败");
+            return map;
         }
     }
 
@@ -160,7 +242,10 @@ public class OrderController {
         // 这里需要在OrderService中添加根据用户ID获取订单的方法
         // 暂时返回所有订单，后续实现
         List<Order> orders = orderService.listOrders();
-        return Map.of("success", true, "orders", orders);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("orders", orders);
+        return map;
     }
 
     // 获取工程师的订单列表
@@ -169,6 +254,9 @@ public class OrderController {
         // 这里需要在OrderService中添加根据工程师ID获取订单的方法
         // 暂时返回所有订单，后续实现
         List<Order> orders = orderService.listOrders();
-        return Map.of("success", true, "orders", orders);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("orders", orders);
+        return map;
     }
 }

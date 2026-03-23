@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -20,9 +22,16 @@ public class MessageController {
     public Map<String, Object> sendMessage(@RequestBody Message message) {
         boolean result = messageService.saveMessage(message);
         if (result) {
-            return Map.of("success", true, "message", "消息发送成功", "data", message);
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", true);
+            map.put("message", "消息发送成功");
+            map.put("data", message);
+            return map;
         } else {
-            return Map.of("success", false, "message", "消息发送失败");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "消息发送失败");
+            return map;
         }
     }
 
@@ -30,7 +39,10 @@ public class MessageController {
     @GetMapping("/order/{orderId}")
     public Map<String, Object> getOrderMessages(@PathVariable Long orderId) {
         List<Message> messages = messageService.getMessagesByOrderId(orderId);
-        return Map.of("success", true, "messages", messages);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("messages", messages);
+        return map;
     }
 
     // 获取用户的消息列表（所有订单）
@@ -38,6 +50,9 @@ public class MessageController {
     public Map<String, Object> getUserMessages(@PathVariable Long userId) {
         // 这里需要在MessageService中添加根据用户ID获取消息的方法
         // 暂时返回空列表，后续实现
-        return Map.of("success", true, "messages", List.of());
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("messages", new ArrayList<>());
+        return map;
     }
 }

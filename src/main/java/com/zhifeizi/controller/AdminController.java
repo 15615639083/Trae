@@ -1,6 +1,6 @@
 package com.zhifeizi.controller;
 
-import com.zhifeizi.entity.EngineerProfile;
+
 import com.zhifeizi.entity.Order;
 import com.zhifeizi.entity.User;
 import com.zhifeizi.service.EngineerProfileService;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -51,21 +52,30 @@ public class AdminController {
     public Map<String, Object> getPendingEngineers() {
         // 这里需要在EngineerProfileService中添加获取待审核工程师的方法
         // 暂时返回空列表，后续实现
-        return Map.of("success", true, "engineers", List.of());
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("engineers", new ArrayList<>());
+        return map;
     }
 
     // 获取所有用户列表
     @GetMapping("/users")
     public Map<String, Object> getUsers() {
-        List<User> users = userService.list();
-        return Map.of("success", true, "users", users);
+        List<User> users = userService.listUsers();
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("users", users);
+        return map;
     }
 
     // 获取所有工程师列表
     @GetMapping("/engineers")
     public Map<String, Object> getEngineers() {
         List<User> engineers = userService.getByRole("engineer");
-        return Map.of("success", true, "engineers", engineers);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("engineers", engineers);
+        return map;
     }
 
     // 人工派单
@@ -75,31 +85,44 @@ public class AdminController {
         Long engineerId = Long.valueOf(params.get("engineerId").toString());
         Long adminId = Long.valueOf(params.get("adminId").toString());
 
-        Order order = orderService.getById(orderId);
+        Order order = orderService.getOrderById(orderId);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
 
         order.setEngineerId(engineerId);
         order.setAdminId(adminId);
         order.setStatus("assigned");
 
-        orderService.update(order);
-        return Map.of("success", true, "message", "派单成功", "order", order);
+        orderService.updateOrder(order);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("message", "派单成功");
+        map.put("order", order);
+        return map;
     }
 
     // 获取订单池
     @GetMapping("/orders/pending")
     public Map<String, Object> getPendingOrders() {
         List<Order> orders = orderService.getByStatus("pending");
-        return Map.of("success", true, "orders", orders);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("orders", orders);
+        return map;
     }
 
     // 获取所有订单
     @GetMapping("/orders")
     public Map<String, Object> getAllOrders() {
-        List<Order> orders = orderService.list();
-        return Map.of("success", true, "orders", orders);
+        List<Order> orders = orderService.listOrders();
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("orders", orders);
+        return map;
     }
 
     // 更新订单状态
@@ -108,13 +131,20 @@ public class AdminController {
         Long orderId = Long.valueOf(params.get("orderId").toString());
         String status = params.get("status").toString();
 
-        Order order = orderService.getById(orderId);
+        Order order = orderService.getOrderById(orderId);
         if (order == null) {
-            return Map.of("success", false, "message", "订单不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "订单不存在");
+            return map;
         }
 
         order.setStatus(status);
-        orderService.update(order);
-        return Map.of("success", true, "message", "状态更新成功", "order", order);
+        orderService.updateOrder(order);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("message", "状态更新成功");
+        map.put("order", order);
+        return map;
     }
 }

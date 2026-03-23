@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/engineer")
@@ -22,15 +23,21 @@ public class EngineerController {
     @PostMapping("/apply")
     public Map<String, Object> applyForEngineer(@RequestBody EngineerProfile profile) {
         // 验证用户是否存在
-        User user = userService.getById(profile.getUserId());
+        User user = userService.getUserById(profile.getUserId());
         if (user == null) {
-            return Map.of("success", false, "message", "用户不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "用户不存在");
+            return map;
         }
 
         // 检查是否已经提交过申请
         EngineerProfile existingProfile = engineerProfileService.getProfileByUserId(profile.getUserId());
         if (existingProfile != null) {
-            return Map.of("success", false, "message", "已经提交过申请");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "已经提交过申请");
+            return map;
         }
 
         // 设置初始状态
@@ -42,25 +49,39 @@ public class EngineerController {
         
         // 更新用户角色为工程师
         user.setRole("engineer");
-        userService.update(user);
+        userService.updateUser(user);
 
-        return Map.of("success", true, "message", "申请提交成功，等待审核", "profile", createdProfile);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("message", "申请提交成功，等待审核");
+        map.put("profile", createdProfile);
+        return map;
     }
 
     @PutMapping("/update")
     public Map<String, Object> updateProfile(@RequestBody EngineerProfile profile) {
         EngineerProfile existingProfile = engineerProfileService.getProfileById(profile.getId());
         if (existingProfile == null) {
-            return Map.of("success", false, "message", "工程师档案不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "工程师档案不存在");
+            return map;
         }
 
         // 只有待审核状态可以修改资料
         if (!"pending".equals(existingProfile.getVerificationStatus())) {
-            return Map.of("success", false, "message", "只有待审核状态可以修改资料");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "只有待审核状态可以修改资料");
+            return map;
         }
 
         EngineerProfile updatedProfile = engineerProfileService.updateProfile(profile);
-        return Map.of("success", true, "message", "资料更新成功", "profile", updatedProfile);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("message", "资料更新成功");
+        map.put("profile", updatedProfile);
+        return map;
     }
 
     @PutMapping("/status")
@@ -70,25 +91,41 @@ public class EngineerController {
 
         EngineerProfile profile = engineerProfileService.getProfileByUserId(userId);
         if (profile == null) {
-            return Map.of("success", false, "message", "工程师档案不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "工程师档案不存在");
+            return map;
         }
 
         // 只有已认证的工程师可以修改状态
         if (!"approved".equals(profile.getVerificationStatus())) {
-            return Map.of("success", false, "message", "只有已认证的工程师可以修改状态");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "只有已认证的工程师可以修改状态");
+            return map;
         }
 
         profile.setStatus(status);
         EngineerProfile updatedProfile = engineerProfileService.updateProfile(profile);
-        return Map.of("success", true, "message", "状态更新成功", "profile", updatedProfile);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("message", "状态更新成功");
+        map.put("profile", updatedProfile);
+        return map;
     }
 
     @GetMapping("/profile/{userId}")
     public Map<String, Object> getProfile(@PathVariable Long userId) {
         EngineerProfile profile = engineerProfileService.getProfileByUserId(userId);
         if (profile == null) {
-            return Map.of("success", false, "message", "工程师档案不存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("success", false);
+            map.put("message", "工程师档案不存在");
+            return map;
         }
-        return Map.of("success", true, "profile", profile);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("profile", profile);
+        return map;
     }
 }
